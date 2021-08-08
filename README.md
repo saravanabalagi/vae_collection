@@ -4,39 +4,43 @@
 
 <p align="center">
       <a href="https://www.python.org/">
-        <img src="https://img.shields.io/badge/Python-3.5-ff69b4.svg" /></a>
+        <img src="https://img.shields.io/badge/Python-3.8-ff69b4.svg" /></a>
        <a href= "https://pytorch.org/">
-        <img src="https://img.shields.io/badge/PyTorch-1.3-2BAF2B.svg" /></a>
-       <a href= "https://github.com/AntixK/PyTorch-VAE/blob/master/LICENSE.md">
+        <img src="https://img.shields.io/badge/PyTorch-1.9-2BAF2B.svg" /></a>
+       <a href= "https://github.com/saravanabalagi/vae_collection/blob/master/LICENSE.md">
         <img src="https://img.shields.io/badge/license-Apache2.0-blue.svg" /></a>
-         <a href= "https://twitter.com/intent/tweet?text=PyTorch-VAE:%20Collection%20of%20VAE%20models%20in%20PyTorch.&url=https://github.com/AntixK/PyTorch-VAE">
-        <img src="https://img.shields.io/twitter/url/https/shields.io.svg?style=social" /></a>
-
 </p>
 
 A collection of Variational AutoEncoders (VAEs) implemented in pytorch with focus on reproducibility. The aim of this project is to provide
 a quick and simple working example for many of the cool VAE models out there. All the models are trained on the [CelebA dataset](http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html)
 for consistency and comparison. The architecture of all the models are kept as similar as possible with the same layers, except for cases where the original paper necessitates 
 a radically different architecture (Ex. VQ VAE uses Residual layers and no Batch-Norm, unlike other models).
-Here are the [results](https://github.com/AntixK/PyTorch-VAE/blob/master/README.md#--results) of each model.
+Here are the [results](https://github.com/AntixK/PyTorch-VAE/blob/master/README.md#--results) of each model. 
 
-### Requirements
-- Python >= 3.5
-- PyTorch >= 1.3
-- Pytorch Lightning >= 0.6.0 ([GitHub Repo](https://github.com/PyTorchLightning/pytorch-lightning/tree/deb1581e26b7547baf876b7a94361e60bb200d32))
-- CUDA enabled computing device
+Forked from [PyTorch-VAE](https://github.com/AntixK/PyTorch-VAE). This fork updates the code to make it function with Python 3.8, PyTorch 1.9, Tensorboard 2.5 and PyTorch Lightning 1.4. There are some additional modifications to speed up the training such as parallel data workers, 16-bit precision, etc.
 
 ### Installation
-```
-$ git clone https://github.com/AntixK/PyTorch-VAE
-$ cd PyTorch-VAE
-$ pip install -r requirements.txt
+
+This repo uses [poetry](https://python-poetry.org/) for managing dependencies
+
+```sh
+git clone https://github.com/saravanabalagi/vae_collection
+cd vae_collection
+poetry install
 ```
 
-### Usage
+If you need CUDA GPU support, install PyTorch CUDA manually after activating the environment:
+
+```sh
+poetry shell # or
+source .venv/bin/activate
+
+pip install torch==1.9.0+cu111 torchvision==0.10.0+cu111 -f https://download.pytorch.org/whl/torch_stable.html
 ```
-$ cd PyTorch-VAE
-$ python run.py -c configs/<config-file-name.yaml>
+
+### Training
+```sh
+python run.py -c configs/<config-file-name.yaml>
 ```
 **Config file template**
 ```yaml
@@ -49,9 +53,11 @@ model_params:
     .
 
 exp_params:
-  data_path: "<path to the celebA dataset>"
-  img_size: 64    # Models are designed to work for this size
-  batch_size: 64  # Better to have a square number
+  dataset: 'celeba'
+  data_path: '<path to the celebA dataset>'
+  num_workers_dataloader: 6   # Number of parallel workers for loading (and augmenting) data 
+  img_size: 64                # Models are designed to work for this size
+  batch_size: 144             # Better to have a square number
   LR: 0.005
   weight_decay:
     .         # Other arguments required for training, like scheduler etc.
@@ -60,7 +66,8 @@ exp_params:
 
 trainer_params:
   gpus: 1         
-  max_nb_epochs: 50
+  max_epochs: 50
+  precision: 16             # Uses 16-bit floats to accelerate training
   gradient_clip_val: 1.5
     .
     .
@@ -73,9 +80,9 @@ logging_params:
 ```
 
 **View TensorBoard Logs**
-```
-$ cd logs/<experiment name>/version_<the version you want>
-$ tensorboard --logdir tf
+```sh
+cd logs/<experiment_name>/version_<the version you want>
+tensorboard --logdir tf
 ```
 
 ----
@@ -132,35 +139,10 @@ $ tensorboard --logdir tf
 - [ ] Vamp VAE (Doesn't work well)
 -->
 
-### Contributing
-If you have trained a better model, using these implementations, by fine-tuning the hyper-params in the config file,
-I would be happy to include your result (along with your config file) in this repo, citing your name 😊.
+## License
 
-Additionally, if you would like to contribute some models, please submit a PR.
+Please see attached [LICENSE](LICENSE). License of the parent repo is available [here](https://github.com/AntixK/PyTorch-VAE/blob/master/LICENSE.md)
 
-### License
-**Apache License 2.0**
-
-| Permissions      | Limitations       | Conditions                       |
-|------------------|-------------------|----------------------------------|
-| ✔️ Commercial use |  ❌  Trademark use |  ⓘ License and copyright notice | 
-| ✔️ Modification   |  ❌  Liability     |  ⓘ State changes                |
-| ✔️ Distribution   |  ❌  Warranty      |                                  |
-| ✔️ Patent use     |                   |                                  |
-| ✔️ Private use    |                   |                                  |
-
-
-### Citation
-```
-@misc{Subramanian2020,
-  author = {Subramanian, A.K},
-  title = {PyTorch-VAE},
-  year = {2020},
-  publisher = {GitHub},
-  journal = {GitHub repository},
-  howpublished = {\url{https://github.com/AntixK/PyTorch-VAE}}
-}
-```
 -----------
 
 [vae_code]: https://github.com/AntixK/PyTorch-VAE/blob/master/models/vanilla_vae.py
