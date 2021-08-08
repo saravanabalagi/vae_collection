@@ -124,7 +124,8 @@ class SWAE(BaseVAE):
         swd_loss = self.compute_swd(z, self.p, reg_weight)
 
         loss = recons_loss_l2 + recons_loss_l1 + swd_loss
-        return {'loss': loss, 'Reconstruction_Loss':(recons_loss_l2 + recons_loss_l1), 'SWD': swd_loss}
+        recons_loss = (recons_loss_l1 + recons_loss_l2)
+        return {'loss': loss, 'Reconstruction_Loss': recons_loss.detach(), 'SWD': swd_loss.detach()}
 
     def get_random_projections(self, latent_dim: int, num_samples: int) -> Tensor:
         """

@@ -177,11 +177,10 @@ class FactorVAE(BaseVAE):
 
             loss = recons_loss + kld_weight * kld_loss + self.gamma * vae_tc_loss
 
-            # print(f' recons: {recons_loss}, kld: {kld_loss}, VAE_TC_loss: {vae_tc_loss}')
             return {'loss': loss,
-                    'Reconstruction_Loss':recons_loss,
-                    'KLD':-kld_loss,
-                    'VAE_TC_Loss': vae_tc_loss}
+                    'Reconstruction_Loss': recons_loss.detach(),
+                    'KLD': kld_loss.detach(),
+                    'VAE_TC_Loss': vae_tc_loss.detach()}
 
         # Update the Discriminator
         elif optimizer_idx == 1:

@@ -231,7 +231,7 @@ class JointVAE(BaseVAE):
 
         if self.training:
             self.num_iter += 1
-        return {'loss': loss, 'Reconstruction_Loss':recons_loss, 'Capacity_Loss':capacity_loss}
+        return {'loss': loss, 'Reconstruction_Loss': recons_loss.detach(), 'Capacity_Loss': capacity_loss.detach()}
 
     def sample(self,
                num_samples:int,

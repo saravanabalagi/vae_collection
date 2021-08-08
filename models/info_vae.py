@@ -145,7 +145,7 @@ class InfoVAE(BaseVAE):
         loss = self.beta * recons_loss + \
                (1. - self.alpha) * kld_weight * kld_loss + \
                (self.alpha + self.reg_weight - 1.)/bias_corr * mmd_loss
-        return {'loss': loss, 'Reconstruction_Loss':recons_loss, 'MMD': mmd_loss, 'KLD':-kld_loss}
+        return {'loss': loss, 'Reconstruction_Loss': recons_loss.detach(), 'MMD': mmd_loss.detach(), 'KLD': kld_loss.detach()}
 
     def compute_kernel(self,
                        x1: Tensor,

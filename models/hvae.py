@@ -228,7 +228,7 @@ class HVAE(BaseVAE):
         loss = recons_loss + kld_weight * kld_loss
         # print(z2_p_kld)
 
-        return {'loss': loss, 'Reconstruction Loss':recons_loss, 'KLD':-kld_loss}
+        return {'loss': loss, 'Reconstruction Loss': recons_loss.detach(), 'KLD': kld_loss.detach()}
 
     def sample(self, batch_size:int, current_device: int, **kwargs) -> Tensor:
         z2 = torch.randn(batch_size,

@@ -159,9 +159,9 @@ class DIPVAE(BaseVAE):
 
         loss = recons_loss + kld_weight * kld_loss + dip_loss
         return {'loss': loss,
-                'Reconstruction_Loss':recons_loss,
-                'KLD':-kld_loss,
-                'DIP_Loss':dip_loss}
+                'Reconstruction_Loss': recons_loss.detach(),
+                'KLD': kld_loss.detach(),
+                'DIP_Loss': dip_loss.detach()}
 
     def sample(self,
                num_samples:int,

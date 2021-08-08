@@ -174,7 +174,7 @@ class CategoricalVAE(BaseVAE):
 
         # kld_weight = 1.2
         loss = self.alpha * recons_loss + kld_weight * kld_loss
-        return {'loss': loss, 'Reconstruction_Loss':recons_loss, 'KLD':-kld_loss}
+        return {'loss': loss, 'Reconstruction_Loss': recons_loss.detach(), 'KLD': kld_loss.detach()}
 
     def sample(self,
                num_samples:int,

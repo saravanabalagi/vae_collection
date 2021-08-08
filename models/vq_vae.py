@@ -207,8 +207,8 @@ class VQVAE(BaseVAE):
 
         loss = recons_loss + vq_loss
         return {'loss': loss,
-                'Reconstruction_Loss': recons_loss,
-                'VQ_Loss':vq_loss}
+                'Reconstruction_Loss': recons_loss.detach(),
+                'VQ_Loss': vq_loss.detach()}
 
     def sample(self,
                num_samples: int,

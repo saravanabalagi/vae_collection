@@ -234,7 +234,7 @@ class LVAE(BaseVAE):
 
         kld_loss = torch.mean(kl_div, dim = 0)
         loss = recons_loss + kld_weight * kld_loss
-        return {'loss': loss, 'Reconstruction_Loss':recons_loss, 'KLD':-kld_loss }
+        return {'loss': loss, 'Reconstruction_Loss': recons_loss.detach(), 'KLD': kld_loss.detach() }
 
     def sample(self,
                num_samples:int,

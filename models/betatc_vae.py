@@ -205,10 +205,10 @@ class BetaTCVAE(BaseVAE):
                          anneal_rate * self.gamma * kld_loss)
         
         return {'loss': loss,
-                'Reconstruction_Loss':recons_loss,
-                'KLD':kld_loss,
-                'TC_Loss':tc_loss,
-                'MI_Loss':mi_loss}
+                'Reconstruction_Loss': recons_loss.detach(),
+                'KLD': kld_loss.detach(),
+                'TC_Loss': tc_loss.detach(),
+                'MI_Loss': mi_loss.detach()}
 
     def sample(self,
                num_samples:int,

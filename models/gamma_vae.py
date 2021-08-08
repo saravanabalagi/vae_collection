@@ -208,8 +208,8 @@ class GammaVAE(BaseVAE):
 
         loss = recons_loss + kld_loss
         loss = torch.mean(loss, dim = 0)
-        # print(loss, recons_loss, kld_loss)
-        return {'loss': loss} #, 'Reconstruction_Loss': recons_loss, 'KLD': -kld_loss}
+        
+        return {'loss': loss, 'Reconstruction_Loss': recons_loss.detach(), 'KLD': kld_loss.detach()}
 
     def sample(self,
                num_samples:int,
