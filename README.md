@@ -1,6 +1,4 @@
-<h1 align="center">
-  <b>PyTorch VAE</b><br>
-</h1>
+<h1 align="center"> VAE Collection </h1>
 
 <p align="center">
       <a href="https://www.python.org/">
@@ -8,18 +6,20 @@
        <a href= "https://pytorch.org/">
         <img src="https://img.shields.io/badge/PyTorch-1.9-2BAF2B.svg" /></a>
        <a href= "https://github.com/saravanabalagi/vae_collection/blob/master/LICENSE.md">
-        <img src="https://img.shields.io/badge/license-Apache2.0-blue.svg" /></a>
+        <img src="https://img.shields.io/badge/License-MIT-blue.svg" /></a>
 </p>
 
 A collection of Variational AutoEncoders (VAEs) implemented in pytorch with focus on reproducibility. The aim of this project is to provide
-a quick and simple working example for many of the cool VAE models out there. All the models are trained on the [CelebA dataset](http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html)
+a quick and simple working example for many of the cool VAE models out there. 
+
+All the models are trained on the [CelebA dataset](http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html)
 for consistency and comparison. The architecture of all the models are kept as similar as possible with the same layers, except for cases where the original paper necessitates 
 a radically different architecture (Ex. VQ VAE uses Residual layers and no Batch-Norm, unlike other models).
-Here are the [results](https://github.com/AntixK/PyTorch-VAE/blob/master/README.md#--results) of each model. 
+Here are the [results](#results) of each model. 
 
 Forked from [PyTorch-VAE](https://github.com/AntixK/PyTorch-VAE). This fork updates the code to make it function with Python 3.8, PyTorch 1.9, Tensorboard 2.5 and PyTorch Lightning 1.4. There are some additional modifications to speed up the training such as parallel data workers, 16-bit precision, etc.
 
-### Installation
+## Installation
 
 This repo uses [poetry](https://python-poetry.org/) for managing dependencies
 
@@ -38,11 +38,11 @@ source .venv/bin/activate
 pip install torch==1.9.0+cu111 torchvision==0.10.0+cu111 -f https://download.pytorch.org/whl/torch_stable.html
 ```
 
-### Training
+## Training
 ```sh
 python run.py -c configs/<config-file-name.yaml>
 ```
-**Config file template**
+### Config file template
 ```yaml
 model_params:
   name: "<name of VAE model>"
@@ -79,16 +79,14 @@ logging_params:
   manual_seed: 
 ```
 
-**View TensorBoard Logs**
+### View TensorBoard Logs
 ```sh
 cd logs/<experiment_name>/version_<the version you want>
 tensorboard --logdir tf
 ```
 
 ----
-<h2 align="center">
-  <b>Results</b><br>
-</h2>
+## Results
 
 
 | Model                                                                  | Paper                                            |Reconstruction | Samples |
@@ -145,87 +143,74 @@ Please see attached [LICENSE](LICENSE). License of the parent repo is available 
 
 -----------
 
-[vae_code]: https://github.com/AntixK/PyTorch-VAE/blob/master/models/vanilla_vae.py
-[cvae_code]: https://github.com/AntixK/PyTorch-VAE/blob/master/models/cvae.py
-[bvae_code]: https://github.com/AntixK/PyTorch-VAE/blob/master/models/beta_vae.py
-[btcvae_code]: https://github.com/AntixK/PyTorch-VAE/blob/master/models/betatc_vae.py
-[wae_code]: https://github.com/AntixK/PyTorch-VAE/blob/master/models/wae_mmd.py
-[iwae_code]: https://github.com/AntixK/PyTorch-VAE/blob/master/models/iwae.py
-[miwae_code]: https://github.com/AntixK/PyTorch-VAE/blob/master/models/miwae.py
-[swae_code]: https://github.com/AntixK/PyTorch-VAE/blob/master/models/swae.py
-[jointvae_code]: https://github.com/AntixK/PyTorch-VAE/blob/master/models/joint_vae.py
-[dfcvae_code]: https://github.com/AntixK/PyTorch-VAE/blob/master/models/dfcvae.py
-[mssimvae_code]: https://github.com/AntixK/PyTorch-VAE/blob/master/models/mssim_vae.py
-[logcoshvae_code]: https://github.com/AntixK/PyTorch-VAE/blob/master/models/logcosh_vae.py
-[catvae_code]: https://github.com/AntixK/PyTorch-VAE/blob/master/models/cat_vae.py
-[infovae_code]: https://github.com/AntixK/PyTorch-VAE/blob/master/models/info_vae.py
-[vqvae_code]: https://github.com/AntixK/PyTorch-VAE/blob/master/models/vq_vae.py
-[dipvae_code]: https://github.com/AntixK/PyTorch-VAE/blob/master/models/dip_vae.py
+[vae_code]: models/vanilla_vae.py
+[cvae_code]: models/cvae.py
+[bvae_code]: models/beta_vae.py
+[btcvae_code]: models/betatc_vae.py
+[wae_code]: models/wae_mmd.py
+[iwae_code]: models/iwae.py
+[miwae_code]: models/miwae.py
+[swae_code]: models/swae.py
+[jointvae_code]: models/joint_vae.py
+[dfcvae_code]: models/dfcvae.py
+[mssimvae_code]: models/mssim_vae.py
+[logcoshvae_code]: models/logcosh_vae.py
+[catvae_code]: models/cat_vae.py
+[infovae_code]: models/info_vae.py
+[vqvae_code]: models/vq_vae.py
+[dipvae_code]: models/dip_vae.py
 
-[vae_config]: https://github.com/AntixK/PyTorch-VAE/blob/master/configs/vae.yaml
-[cvae_config]: https://github.com/AntixK/PyTorch-VAE/blob/master/configs/cvae.yaml
-[bbvae_config]: https://github.com/AntixK/PyTorch-VAE/blob/master/configs/bbvae.yaml
-[bhvae_config]: https://github.com/AntixK/PyTorch-VAE/blob/master/configs/bhvae.yaml
-[btcvae_config]: https://github.com/AntixK/PyTorch-VAE/blob/master/configs/betatc_vae.yaml
-[wae_rbf_config]: https://github.com/AntixK/PyTorch-VAE/blob/master/configs/wae_mmd_rbf.yaml
-[wae_imq_config]: https://github.com/AntixK/PyTorch-VAE/blob/master/configs/wae_mmd_imq.yaml
-[iwae_config]: https://github.com/AntixK/PyTorch-VAE/blob/master/configs/iwae.yaml
-[miwae_config]: https://github.com/AntixK/PyTorch-VAE/blob/master/configs/miwae.yaml
-[swae_config]: https://github.com/AntixK/PyTorch-VAE/blob/master/configs/swae.yaml
-[jointvae_config]: https://github.com/AntixK/PyTorch-VAE/blob/master/configs/joint_vae.yaml
-[dfcvae_config]: https://github.com/AntixK/PyTorch-VAE/blob/master/configs/dfc_vae.yaml
-[mssimvae_config]: https://github.com/AntixK/PyTorch-VAE/blob/master/configs/mssim_vae.yaml
-[logcoshvae_config]: https://github.com/AntixK/PyTorch-VAE/blob/master/configs/logcosh_vae.yaml
-[catvae_config]: https://github.com/AntixK/PyTorch-VAE/blob/master/configs/cat_vae.yaml
-[infovae_config]: https://github.com/AntixK/PyTorch-VAE/blob/master/configs/infovae.yaml
-[vqvae_config]: https://github.com/AntixK/PyTorch-VAE/blob/master/configs/vq_vae.yaml
-[dipvae_config]: https://github.com/AntixK/PyTorch-VAE/blob/master/configs/dip_vae.yaml
+[vae_config]: configs/vae.yaml
+[cvae_config]: configs/cvae.yaml
+[bbvae_config]: configs/bbvae.yaml
+[bhvae_config]: configs/bhvae.yaml
+[btcvae_config]: configs/betatc_vae.yaml
+[wae_rbf_config]: configs/wae_mmd_rbf.yaml
+[wae_imq_config]: configs/wae_mmd_imq.yaml
+[iwae_config]: configs/iwae.yaml
+[miwae_config]: configs/miwae.yaml
+[swae_config]: configs/swae.yaml
+[jointvae_config]: configs/joint_vae.yaml
+[dfcvae_config]: configs/dfc_vae.yaml
+[mssimvae_config]: configs/mssim_vae.yaml
+[logcoshvae_config]: configs/logcosh_vae.yaml
+[catvae_config]: configs/cat_vae.yaml
+[infovae_config]: configs/infovae.yaml
+[vqvae_config]: configs/vq_vae.yaml
+[dipvae_config]: configs/dip_vae.yaml
 
-[1]: https://github.com/AntixK/PyTorch-VAE/blob/master/assets/Vanilla%20VAE_25.png
-[2]: https://github.com/AntixK/PyTorch-VAE/blob/master/assets/recons_Vanilla%20VAE_25.png
-[3]: https://github.com/AntixK/PyTorch-VAE/blob/master/assets/WAE_RBF_18.png
-[4]: https://github.com/AntixK/PyTorch-VAE/blob/master/assets/recons_WAE_RBF_19.png
-[5]: https://github.com/AntixK/PyTorch-VAE/blob/master/assets/WAE_IMQ_15.png
-[6]: https://github.com/AntixK/PyTorch-VAE/blob/master/assets/recons_WAE_IMQ_15.png
-[7]: https://github.com/AntixK/PyTorch-VAE/blob/master/assets/BetaVAE_H_20.png
-[8]: https://github.com/AntixK/PyTorch-VAE/blob/master/assets/recons_BetaVAE_H_20.png
-[9]: https://github.com/AntixK/PyTorch-VAE/blob/master/assets/IWAE_19.png
-[10]: https://github.com/AntixK/PyTorch-VAE/blob/master/assets/recons_IWAE_19.png
-[11]: https://github.com/AntixK/PyTorch-VAE/blob/master/assets/DFCVAE_49.png
-[12]: https://github.com/AntixK/PyTorch-VAE/blob/master/assets/recons_DFCVAE_49.png
-[13]: https://github.com/AntixK/PyTorch-VAE/blob/master/assets/MSSIMVAE_29.png
-[14]: https://github.com/AntixK/PyTorch-VAE/blob/master/assets/recons_MSSIMVAE_29.png
-[15]: https://github.com/AntixK/PyTorch-VAE/blob/master/assets/ConditionalVAE_20.png
-[16]: https://github.com/AntixK/PyTorch-VAE/blob/master/assets/recons_ConditionalVAE_20.png
-[17]: https://github.com/AntixK/PyTorch-VAE/blob/master/assets/CategoricalVAE_49.png
-[18]: https://github.com/AntixK/PyTorch-VAE/blob/master/assets/recons_CategoricalVAE_49.png
-[19]: https://github.com/AntixK/PyTorch-VAE/blob/master/assets/JointVAE_49.png
-[20]: https://github.com/AntixK/PyTorch-VAE/blob/master/assets/recons_JointVAE_49.png
-[21]: https://github.com/AntixK/PyTorch-VAE/blob/master/assets/BetaVAE_B_35.png
-[22]: https://github.com/AntixK/PyTorch-VAE/blob/master/assets/recons_BetaVAE_B_35.png
-[23]: https://github.com/AntixK/PyTorch-VAE/blob/master/assets/InfoVAE_31.png
-[24]: https://github.com/AntixK/PyTorch-VAE/blob/master/assets/recons_InfoVAE_31.png
-[25]: https://github.com/AntixK/PyTorch-VAE/blob/master/assets/LogCoshVAE_49.png
-[26]: https://github.com/AntixK/PyTorch-VAE/blob/master/assets/recons_LogCoshVAE_49.png
-[27]: https://github.com/AntixK/PyTorch-VAE/blob/master/assets/SWAE_49.png
-[28]: https://github.com/AntixK/PyTorch-VAE/blob/master/assets/recons_SWAE_49.png
-[29]: https://github.com/AntixK/PyTorch-VAE/blob/master/assets/MIWAE_29.png
-[30]: https://github.com/AntixK/PyTorch-VAE/blob/master/assets/recons_MIWAE_29.png
-[31]: https://github.com/AntixK/PyTorch-VAE/blob/master/assets/recons_VQVAE_29.png
-[33]: https://github.com/AntixK/PyTorch-VAE/blob/master/assets/BetaTCVAE_49.png
-[34]: https://github.com/AntixK/PyTorch-VAE/blob/master/assets/recons_BetaTCVAE_49.png
-[35]: https://github.com/AntixK/PyTorch-VAE/blob/master/assets/DIPVAE_83.png
-[36]: https://github.com/AntixK/PyTorch-VAE/blob/master/assets/recons_DIPVAE_83.png
-
-[python-image]: https://img.shields.io/badge/Python-3.5-ff69b4.svg
-[python-url]: https://www.python.org/
-
-[pytorch-image]: https://img.shields.io/badge/PyTorch-1.3-2BAF2B.svg
-[pytorch-url]: https://pytorch.org/
-
-[twitter-image]:https://img.shields.io/twitter/url/https/shields.io.svg?style=social
-[twitter-url]:https://twitter.com/intent/tweet?text=Neural%20Blocks-Easy%20to%20use%20neural%20net%20blocks%20for%20fast%20prototyping.&url=https://github.com/AntixK/NeuralBlocks
-
-
-[license-image]:https://img.shields.io/badge/license-Apache2.0-blue.svg
-[license-url]:https://github.com/AntixK/PyTorch-VAE/blob/master/LICENSE.md
+[1]: assets/Vanilla%20VAE_25.png
+[2]: assets/recons_Vanilla%20VAE_25.png
+[3]: assets/WAE_RBF_18.png
+[4]: assets/recons_WAE_RBF_19.png
+[5]: assets/WAE_IMQ_15.png
+[6]: assets/recons_WAE_IMQ_15.png
+[7]: assets/BetaVAE_H_20.png
+[8]: assets/recons_BetaVAE_H_20.png
+[9]: assets/IWAE_19.png
+[10]: assets/recons_IWAE_19.png
+[11]: assets/DFCVAE_49.png
+[12]: assets/recons_DFCVAE_49.png
+[13]: assets/MSSIMVAE_29.png
+[14]: assets/recons_MSSIMVAE_29.png
+[15]: assets/ConditionalVAE_20.png
+[16]: assets/recons_ConditionalVAE_20.png
+[17]: assets/CategoricalVAE_49.png
+[18]: assets/recons_CategoricalVAE_49.png
+[19]: assets/JointVAE_49.png
+[20]: assets/recons_JointVAE_49.png
+[21]: assets/BetaVAE_B_35.png
+[22]: assets/recons_BetaVAE_B_35.png
+[23]: assets/InfoVAE_31.png
+[24]: assets/recons_InfoVAE_31.png
+[25]: assets/LogCoshVAE_49.png
+[26]: assets/recons_LogCoshVAE_49.png
+[27]: assets/SWAE_49.png
+[28]: assets/recons_SWAE_49.png
+[29]: assets/MIWAE_29.png
+[30]: assets/recons_MIWAE_29.png
+[31]: assets/recons_VQVAE_29.png
+[33]: assets/BetaTCVAE_49.png
+[34]: assets/recons_BetaTCVAE_49.png
+[35]: assets/DIPVAE_83.png
+[36]: assets/recons_DIPVAE_83.png
