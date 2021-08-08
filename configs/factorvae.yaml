@@ -7,6 +7,7 @@ model_params:
 exp_params:
   dataset: 'celeba'
   data_path: 'data'
+  num_workers_dataloader: 6
   submodel: 'discriminator'
   retain_first_backpass: True
   img_size: 64
@@ -21,6 +22,7 @@ trainer_params:
   gpus: 1
   max_nb_epochs: 30
   max_epochs: 50
+  precision: 16
 
 logging_params:
   save_dir: 'logs'
