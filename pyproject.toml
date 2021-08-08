@@ -22,6 +22,9 @@ torchvision = "^0.10.0"
 # for cuda installaion install pytorch manually using pip
 # pip install torch==1.9.0+cu111 torchvision==0.10.0+cu111 -f https://download.pytorch.org/whl/torch_stable.html
 
+[tool.poetry.dev-dependencies]
+pytest = "^6.2.4"
+
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
