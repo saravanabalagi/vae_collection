@@ -1,14 +1,13 @@
-import math
 import torch
 from torch import optim
 from models import BaseVAE
 from models.types_ import *
-from utils import data_loader
 import pytorch_lightning as pl
 from torchvision import transforms
 import torchvision.utils as vutils
 from torchvision.datasets import CelebA
 from torch.utils.data import DataLoader
+import os
 
 
 class VAEXperiment(pl.LightningModule):
@@ -20,6 +19,7 @@ class VAEXperiment(pl.LightningModule):
 
         self.model = vae_model
         self.params = params
+        self.save_hyperparameters(params)
         self.curr_device = None
         self.hold_graph = False
         try:
@@ -56,10 +56,11 @@ class VAEXperiment(pl.LightningModule):
 
         return val_loss
 
-    def validation_end(self, outputs):
+    def validation_epoch_end(self, outputs):
         avg_loss = torch.stack([x['loss'] for x in outputs]).mean()
         tensorboard_logs = {'avg_val_loss': avg_loss}
         self.sample_images()
+        self.log_dict({'val_loss': avg_loss})
         return {'val_loss': avg_loss, 'log': tensorboard_logs}
 
     def sample_images(self):
@@ -68,30 +69,30 @@ class VAEXperiment(pl.LightningModule):
         test_input = test_input.to(self.curr_device)
         test_label = test_label.to(self.curr_device)
         recons = self.model.generate(test_input, labels = test_label)
+
+        logger = self.logger
+        img_dir = os.path.join(logger.save_dir, logger.name, f'version_{logger.version}', 'media')
+
+        vutils.save_image(test_input, 
+                    os.path.join(img_dir, f"epoch_{self.current_epoch}_input.png"),
+                    normalize=True,
+                    nrow=12)
+
         vutils.save_image(recons.data,
-                          f"{self.logger.save_dir}{self.logger.name}/version_{self.logger.version}/"
-                          f"recons_{self.logger.name}_{self.current_epoch}.png",
+                          os.path.join(img_dir, f"epoch_{self.current_epoch}_recons.png"),
                           normalize=True,
                           nrow=12)
-
-        # vutils.save_image(test_input.data,
-        #                   f"{self.logger.save_dir}{self.logger.name}/version_{self.logger.version}/"
-        #                   f"real_img_{self.logger.name}_{self.current_epoch}.png",
-        #                   normalize=True,
-        #                   nrow=12)
 
         try:
             samples = self.model.sample(144,
                                         self.curr_device,
                                         labels = test_label)
             vutils.save_image(samples.cpu().data,
-                              f"{self.logger.save_dir}{self.logger.name}/version_{self.logger.version}/"
-                              f"{self.logger.name}_{self.current_epoch}.png",
+                              os.path.join(img_dir, f"epoch_{self.current_epoch}_samples.png"),
                               normalize=True,
                               nrow=12)
         except:
             pass
-
 
         del test_input, recons #, samples
 
@@ -132,7 +133,6 @@ class VAEXperiment(pl.LightningModule):
         except:
             return optims
 
-    @data_loader
     def train_dataloader(self):
         transform = self.data_transforms()
 
@@ -150,7 +150,6 @@ class VAEXperiment(pl.LightningModule):
                           shuffle = True,
                           drop_last=True)
 
-    @data_loader
     def val_dataloader(self):
         transform = self.data_transforms()
 
