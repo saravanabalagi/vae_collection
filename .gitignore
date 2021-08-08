@@ -1,10 +1,6 @@
-
-data/
-logs/
-
-VanillaVAE/version_0/
-
+.venv
 __pycache__/
 .ipynb_checkpoints/
 
-Run.ipynb
+data/
+logs/

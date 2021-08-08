@@ -1,0 +1,27 @@
+[tool.poetry]
+name = "vae_collection"
+version = "0.1.0"
+description = ""
+authors = ["Saravanabalagi Ramachandran <saravanabalagi@hotmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+torchfile = "^0.1.0"
+torchnet = "^0.0.4"
+torchsummary = "^1.5.1"
+pytorch-lightning = "^1.4.1"
+PyYAML = "^5.4.1"
+tensorboard = "^2.4.1"
+tensorboardX = "^2.4"
+terminado = "^0.10.1"
+test-tube = "^0.7.5"
+
+# Pytorch
+torch = "^1.9.0"
+torchvision = "^0.10.0"
+# for cuda installaion install pytorch manually using pip
+# pip install torch==1.9.0+cu111 torchvision==0.10.0+cu111 -f https://download.pytorch.org/whl/torch_stable.html
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
