@@ -2,7 +2,7 @@ import torch
 import torch.nn.functional as F
 from models import BaseVAE
 from torch import nn
-from .types_ import *
+from models.types_ import *
 
 
 class LogCoshVAE(BaseVAE):

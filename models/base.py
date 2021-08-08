@@ -1,4 +1,4 @@
-from .types_ import *
+from models.types_ import *
 from torch import nn
 from abc import abstractmethod
 

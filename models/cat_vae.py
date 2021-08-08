@@ -3,7 +3,7 @@ import numpy as np
 from models import BaseVAE
 from torch import nn
 from torch.nn import functional as F
-from .types_ import *
+from models.types_ import *
 
 
 class CategoricalVAE(BaseVAE):

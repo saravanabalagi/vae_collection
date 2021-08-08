@@ -3,7 +3,7 @@ from models import BaseVAE
 from torch import nn
 from torch.distributions import Gamma
 from torch.nn import functional as F
-from .types_ import *
+from models.types_ import *
 import torch.nn.init as init
 
 

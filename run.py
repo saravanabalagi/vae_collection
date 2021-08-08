@@ -1,12 +1,12 @@
 import yaml
 import argparse
 import numpy as np
-
 from models import *
 from experiment import VAEXperiment
 import torch.backends.cudnn as cudnn
 from pytorch_lightning import Trainer
 from pytorch_lightning.loggers import TestTubeLogger
+from utils import OnCheckpointSaveConfigCode
 
 
 parser = argparse.ArgumentParser(description='Generic runner for VAE models')
@@ -37,8 +37,9 @@ np.random.seed(config['logging_params']['manual_seed'])
 cudnn.deterministic = True
 cudnn.benchmark = False
 
-model = vae_models[config['model_params']['name']](**config['model_params'])
-experiment = VAEXperiment(model, config['exp_params'])
+model_module = vae_models[config['model_params']['name']]
+model = model_module(**config['model_params'])
+experiment = VAEXperiment(model, config)
 
 runner = Trainer(default_root_dir=f"{tt_logger.save_dir}",
                  min_epochs=1,
@@ -47,6 +48,7 @@ runner = Trainer(default_root_dir=f"{tt_logger.save_dir}",
                  limit_train_batches=1.,
                  val_check_interval=1.,
                  num_sanity_val_steps=5,
+                 callbacks=[OnCheckpointSaveConfigCode(model_module)],
                  **config['trainer_params'])
 
 print(f"======= Training {config['model_params']['name']} =======")

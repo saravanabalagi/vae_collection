@@ -23,7 +23,7 @@ class VAEXperiment(pl.LightningModule):
         self.curr_device = None
         self.hold_graph = False
         try:
-            self.hold_graph = self.params['retain_first_backpass']
+            self.hold_graph = self.params['exp_params']['retain_first_backpass']
         except:
             pass
 
@@ -36,7 +36,7 @@ class VAEXperiment(pl.LightningModule):
 
         results = self.forward(real_img, labels = labels)
         train_loss = self.model.loss_function(*results,
-                                              M_N = self.params['batch_size']/ self.num_train_imgs,
+                                              M_N = self.params['exp_params']['batch_size']/ self.num_train_imgs,
                                               optimizer_idx=optimizer_idx,
                                               batch_idx = batch_idx)
 
@@ -50,7 +50,7 @@ class VAEXperiment(pl.LightningModule):
 
         results = self.forward(real_img, labels = labels)
         val_loss = self.model.loss_function(*results,
-                                            M_N = self.params['batch_size']/ self.num_val_imgs,
+                                            M_N = self.params['exp_params']['batch_size']/ self.num_val_imgs,
                                             optimizer_idx = optimizer_idx,
                                             batch_idx = batch_idx)
 
@@ -103,29 +103,29 @@ class VAEXperiment(pl.LightningModule):
         scheds = []
 
         optimizer = optim.Adam(self.model.parameters(),
-                               lr=self.params['LR'],
-                               weight_decay=self.params['weight_decay'])
+                               lr=self.params['exp_params']['LR'],
+                               weight_decay=self.params['exp_params']['weight_decay'])
         optims.append(optimizer)
         # Check if more than 1 optimizer is required (Used for adversarial training)
         try:
-            if self.params['LR_2'] is not None:
-                optimizer2 = optim.Adam(getattr(self.model,self.params['submodel']).parameters(),
-                                        lr=self.params['LR_2'])
+            if self.params['exp_params']['LR_2'] is not None:
+                optimizer2 = optim.Adam(getattr(self.model,self.params['exp_params']['submodel']).parameters(),
+                                        lr=self.params['exp_params']['LR_2'])
                 optims.append(optimizer2)
         except:
             pass
 
         try:
-            if self.params['scheduler_gamma'] is not None:
+            if self.params['exp_params']['scheduler_gamma'] is not None:
                 scheduler = optim.lr_scheduler.ExponentialLR(optims[0],
-                                                             gamma = self.params['scheduler_gamma'])
+                                                             gamma = self.params['exp_params']['scheduler_gamma'])
                 scheds.append(scheduler)
 
                 # Check if another scheduler is required for the second optimizer
                 try:
-                    if self.params['scheduler_gamma_2'] is not None:
+                    if self.params['exp_params']['scheduler_gamma_2'] is not None:
                         scheduler2 = optim.lr_scheduler.ExponentialLR(optims[1],
-                                                                      gamma = self.params['scheduler_gamma_2'])
+                                                                      gamma = self.params['exp_params']['scheduler_gamma_2'])
                         scheds.append(scheduler2)
                 except:
                     pass
@@ -136,8 +136,8 @@ class VAEXperiment(pl.LightningModule):
     def train_dataloader(self):
         transform = self.data_transforms()
 
-        if self.params['dataset'] == 'celeba':
-            dataset = CelebA(root = self.params['data_path'],
+        if self.params['exp_params']['dataset'] == 'celeba':
+            dataset = CelebA(root = self.params['exp_params']['data_path'],
                              split = "train",
                              transform=transform,
                              download=False)
@@ -146,20 +146,20 @@ class VAEXperiment(pl.LightningModule):
 
         self.num_train_imgs = len(dataset)
         return DataLoader(dataset,
-                          num_workers=self.params['num_workers_dataloader'],
-                          batch_size= self.params['batch_size'],
+                          num_workers=self.params['exp_params']['num_workers_dataloader'],
+                          batch_size= self.params['exp_params']['batch_size'],
                           shuffle = True,
                           drop_last=True)
 
     def val_dataloader(self):
         transform = self.data_transforms()
 
-        if self.params['dataset'] == 'celeba':
-            self.sample_dataloader =  DataLoader(CelebA(root = self.params['data_path'],
+        if self.params['exp_params']['dataset'] == 'celeba':
+            self.sample_dataloader =  DataLoader(CelebA(root = self.params['exp_params']['data_path'],
                                                         split = "test",
                                                         transform=transform,
                                                         download=False),
-                                                 num_workers=self.params['num_workers_dataloader'],
+                                                 num_workers=self.params['exp_params']['num_workers_dataloader'],
                                                  batch_size= 144,
                                                  shuffle = False,
                                                  drop_last=True)
@@ -174,10 +174,10 @@ class VAEXperiment(pl.LightningModule):
         SetRange = transforms.Lambda(lambda X: 2 * X - 1.)
         SetScale = transforms.Lambda(lambda X: X/X.sum(0).expand_as(X))
 
-        if self.params['dataset'] == 'celeba':
+        if self.params['exp_params']['dataset'] == 'celeba':
             transform = transforms.Compose([transforms.RandomHorizontalFlip(),
                                             transforms.CenterCrop(148),
-                                            transforms.Resize(self.params['img_size']),
+                                            transforms.Resize(self.params['exp_params']['img_size']),
                                             transforms.ToTensor(),
                                             SetRange])
         else:
