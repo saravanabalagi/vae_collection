@@ -40,9 +40,14 @@ class VAEXperiment(pl.LightningModule):
                                               optimizer_idx=optimizer_idx,
                                               batch_idx = batch_idx)
 
-        self.logger.experiment.log({key: val.item() for key, val in train_loss.items()})
-
+        # enable to log every step
+        # self.logger.experiment.log({key: val.item() for key, val in train_loss.items()})
         return train_loss
+
+    def training_epoch_end(self, outputs):
+        self.log_weights_histogram()
+        mean_outputs = self.mean_metrics(outputs)
+        self.log_dict(mean_outputs)
 
     def validation_step(self, batch, batch_idx, optimizer_idx = 0):
         real_img, labels = batch
@@ -57,11 +62,22 @@ class VAEXperiment(pl.LightningModule):
         return val_loss
 
     def validation_epoch_end(self, outputs):
-        avg_loss = torch.stack([x['loss'] for x in outputs]).mean()
-        tensorboard_logs = {'avg_val_loss': avg_loss}
         self.sample_images()
-        self.log_dict({'val_loss': avg_loss})
-        return {'val_loss': avg_loss, 'log': tensorboard_logs}
+        mean_outputs = self.mean_metrics(outputs)
+        mean_outputs['val_loss'] = mean_outputs['loss']
+        del mean_outputs['loss']
+        self.log_dict(mean_outputs)
+
+    def mean_metrics(self, dict_list):
+        metrics = {}
+        for k in dict_list[0].keys():
+            metrics[k] = torch.Tensor([e[k] for e in dict_list]).mean()
+        return metrics
+    
+    def log_weights_histogram(self):
+        # iterating through all parameters
+        for name,params in self.named_parameters():
+            self.logger.experiment.add_histogram(name,params, self.current_epoch)
 
     def sample_images(self):
         # Get sample reconstruction image
