@@ -74,8 +74,8 @@ trainer_params:
     .
 
 logging_params:
-  save_dir: "logs/"
-  name: "<experiment name>"
+  save_dir: 'logs'
+  name: '<experiment name>'
   manual_seed: 
 ```
 
@@ -84,6 +84,12 @@ logging_params:
 cd logs/<experiment_name>/version_<the version you want>
 tensorboard --logdir tf
 ```
+
+### Comparison of Config and Results
+
+Input, Reconstructions, Samples and Experiment Config can be compared across epochs for different experiments and versions in this [notebook](results_compare.ipynb)
+
+![comparison](assets/results_comparison.png)
 
 ----
 ## Results
@@ -139,7 +145,7 @@ tensorboard --logdir tf
 
 ## License
 
-Please see attached [LICENSE](LICENSE). License of the parent repo is available [here](https://github.com/AntixK/PyTorch-VAE/blob/master/LICENSE.md)
+Please see attached [LICENSE](LICENSE). License of the upstream repo is available [here](https://github.com/AntixK/PyTorch-VAE/blob/master/LICENSE.md)
 
 -----------
 
