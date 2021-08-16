@@ -44,7 +44,7 @@ experiment = VAEXperiment(model, config)
 runner = Trainer(default_root_dir=f"{tt_logger.save_dir}",
                  min_epochs=1,
                  logger=tt_logger,
-                 log_every_n_steps=100,
+                 log_every_n_steps=50,
                  limit_train_batches=1.,
                  val_check_interval=1.,
                  num_sanity_val_steps=5,

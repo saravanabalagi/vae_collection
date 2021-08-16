@@ -1,3 +1,4 @@
+from posixpath import split
 import torch
 from torch import optim
 from models import BaseVAE
@@ -5,7 +6,7 @@ from models.types_ import *
 import pytorch_lightning as pl
 from torchvision import transforms
 import torchvision.utils as vutils
-from torchvision.datasets import CelebA
+from datasets import OxfordRobotcar
 from torch.utils.data import DataLoader
 import os
 
@@ -150,13 +151,13 @@ class VAEXperiment(pl.LightningModule):
             return optims
 
     def train_dataloader(self):
-        transform = self.data_transforms()
-
-        if self.params['exp_params']['dataset'] == 'celeba':
-            dataset = CelebA(root = self.params['exp_params']['data_path'],
-                             split = "train",
+        transform = self.data_transforms(split='train')
+        if self.params['exp_params']['dataset'] == 'oxford_robotcar':
+            dataset = OxfordRobotcar(root = self.params['exp_params']['data_path'],
+                             split="train",
                              transform=transform,
                              download=False)
+                            
         else:
             raise ValueError('Undefined dataset type')
 
@@ -168,11 +169,10 @@ class VAEXperiment(pl.LightningModule):
                           drop_last=True)
 
     def val_dataloader(self):
-        transform = self.data_transforms()
-
-        if self.params['exp_params']['dataset'] == 'celeba':
-            self.sample_dataloader =  DataLoader(CelebA(root = self.params['exp_params']['data_path'],
-                                                        split = "test",
+        transform = self.data_transforms(split='valid')
+        if self.params['exp_params']['dataset'] == 'oxford_robotcar':
+            self.sample_dataloader =  DataLoader(OxfordRobotcar(root = self.params['exp_params']['data_path'],
+                                                        split="valid",
                                                         transform=transform,
                                                         download=False),
                                                  num_workers=self.params['exp_params']['num_workers_dataloader'],
@@ -185,17 +185,32 @@ class VAEXperiment(pl.LightningModule):
 
         return self.sample_dataloader
 
-    def data_transforms(self):
+    def data_transforms(self, split):
 
         SetRange = transforms.Lambda(lambda X: 2 * X - 1.)
         SetScale = transforms.Lambda(lambda X: X/X.sum(0).expand_as(X))
 
-        if self.params['exp_params']['dataset'] == 'celeba':
-            transform = transforms.Compose([transforms.RandomHorizontalFlip(),
-                                            transforms.CenterCrop(148),
-                                            transforms.Resize(self.params['exp_params']['img_size']),
-                                            transforms.ToTensor(),
-                                            SetRange])
+        if self.params['exp_params']['dataset'] == 'oxford_robotcar':
+
+            transforms_split = []
+            if split == 'train':
+                transforms_split = [
+                    # transforms.RandomHorizontalFlip(),
+                    # transforms.RandomGrayscale(),
+                    # transforms.CenterCrop(148),
+                    # transforms.RandomCrop(self.params['exp_params']['img_size']),
+                    # transforms.RandomResizedCrop(self.params['exp_params']['img_size'], scale=(0.3, 1.0), ratio=(0.75, 1.3333333333333333)),
+                    transforms.Resize(self.params['exp_params']['img_size']),
+                    transforms.ToTensor(),
+                    SetRange
+                ]
+            else:
+                transforms_split = [
+                    transforms.Resize(self.params['exp_params']['img_size']),
+                    transforms.ToTensor(),
+                    SetRange
+                ]
+            transform = transforms.Compose(transforms_split)
         else:
             raise ValueError('Undefined dataset type')
         return transform
