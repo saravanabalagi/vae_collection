@@ -6,6 +6,7 @@ from experiment import VAEXperiment
 import torch.backends.cudnn as cudnn
 from pytorch_lightning import Trainer
 from pytorch_lightning.loggers import TestTubeLogger
+from pytorch_lightning.callbacks import EarlyStopping
 from utils import OnCheckpointSaveConfigCode
 
 
@@ -48,7 +49,10 @@ runner = Trainer(default_root_dir=f"{tt_logger.save_dir}",
                  limit_train_batches=1.,
                  val_check_interval=1.,
                  num_sanity_val_steps=5,
-                 callbacks=[OnCheckpointSaveConfigCode(model_module)],
+                 callbacks=[
+                   OnCheckpointSaveConfigCode(model_module),
+                   EarlyStopping('val_loss', patience=100)
+                 ],
                  **config['trainer_params'])
 
 print(f"======= Training {config['model_params']['name']} =======")
