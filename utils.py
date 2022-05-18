@@ -6,6 +6,7 @@ import os
 from shutil import copyfile
 from models import vae_models
 import subprocess
+import warnings
 
 
 def get_model_module(exp_path, config):
@@ -18,9 +19,10 @@ def get_model_module(exp_path, config):
         import model
         model_module = model.__dict__[config['model_params']['name']]
     except Exception as e:
-        print(f'Error: {e}')
-        print(f'Could not load model file from {model_module_path}')
-        print(f'Loading model using the current codebase\n')
+        warn_msg = f'Warning: {e}\n' \
+                f'Could not load model file from {model_module_path}\n' \
+                f'Loading model using the current codebase'
+        warnings.warn(warn_msg, RuntimeWarning)
         model_module = vae_models[config['model_params']['name']]
     return model_module
 
@@ -49,3 +51,9 @@ class OnCheckpointSaveConfigCode(Callback):
             # copy code archive for reproducibility
             cmd = f'git ls-files | grep -v "^assets/" | tar -T - -czf {code_path}/code_archive.tar.gz'
             subprocess.call(cmd, shell=True)
+
+
+def split_batches(lst, n):
+    """Yield successive n-sized chunks from lst."""
+    for i in range(0, len(lst), n):
+        yield lst[i:i + n]
