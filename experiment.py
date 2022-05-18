@@ -185,7 +185,7 @@ class VAEXperiment(pl.LightningModule):
 
         return self.sample_dataloader
 
-    def data_transforms(self, split):
+    def data_transforms(self, split: str = None):
 
         SetRange = transforms.Lambda(lambda X: 2 * X - 1.)
         SetScale = transforms.Lambda(lambda X: X/X.sum(0).expand_as(X))
@@ -215,3 +215,14 @@ class VAEXperiment(pl.LightningModule):
             raise ValueError('Undefined dataset type')
         return transform
 
+    def data_transforms_inverse(self):
+        SetRangeInverse = transforms.Lambda(lambda X: (X + 1)/2)
+        # ToTensorInverse = transforms.Lambda(lambda X: (X * 255).to(torch.uint8))
+        if self.params['exp_params']['dataset'] == 'oxford_robotcar':
+            transform = transforms.Compose([
+                SetRangeInverse,
+                transforms.ToPILImage(),
+            ])
+        else:
+            raise ValueError('Undefined dataset type')
+        return transform
